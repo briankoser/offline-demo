@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Service Workers Demo</title>
+</head>
+<body>
+    This is my service workers demo
+    <script>
+        if (navigator.serviceWorker) {
+            navigator.serviceWorker.register('/serviceworker.js')
+                .then( function (registration) {
+                    console.log("Success", registration.scope);
+                })
+                .catch( function (error) {
+                    console.error("Failure", error);
+                });
+            
+            console.log("All done");                
+        }
+    </script>
+</body>
+</html>
