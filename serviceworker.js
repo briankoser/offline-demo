@@ -14,4 +14,6 @@ addEventListener('fetch', fetchEvent => {
     const request = fetchEvent.request;
     console.log('The service worker is listening');
     console.log(request);
+
+    fetchEvent.respondWith(new Response('Hello world!'));
 });

@@ -20,6 +20,8 @@ Service Workers
     - Update - updates
     - Unregister - deletes
     - Stop - stops
+- Fetch API
+- Cache API
 
 ## Presentation
 - Introduction
@@ -31,7 +33,7 @@ Service Workers
 
 ## Puns
 Cache as cache can
-Cache me outside
+Cache me ouside how bou dat
 Cache me if you can
 Cache money
 Cache or check
