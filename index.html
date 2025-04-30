@@ -1,13 +1,37 @@
 <!DOCTYPE html>
 <html lang="en-US">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Service Workers Demo</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page ♪ Johnny Cache</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body>
-    This is my service workers demo
+    <div class="wordart radial"><span class="text">Johnny Cache Fan Site ♫</span></div>
+
+    <div class="movies">
+        <h1>1. Unforgiven (1992)</h1>
+        <img src="images/Unforgiven-Clint-Eastwood.jpg" alt="">
+        <p></p>
+    </div>
+
+    <nav id="menu">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="johnny.html">The Man in Beige</a></li>
+            <li><a href="albums.html">Albums</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="side">
+        <img src="gifs/western5.gif">
+        <img src="gifs/western2.gif">
+        <img src="gifs/western1.gif">
+    </div>
+
     <script>
         if (navigator.serviceWorker) {
             navigator.serviceWorker.register('/serviceworker.js')
@@ -22,4 +46,5 @@
         }
     </script>
 </body>
+
 </html>

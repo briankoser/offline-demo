@@ -1,8 +1,13 @@
 # offline-demo
 Offline demo for a Lunch and Learn
 
-## Going Offline by Jeremy Keith
+## Credits
+- Service worker based on Jeremy Keith's in Going Offline
+- HTML and CSS based on https://github.com/alessandraburckhalter/90s-Website
+- Images from Keith Coleman http://www.johnnycash1.com/index.htm
+- With apologies to Willie Nelson
 
+## Going Offline by Jeremy Keith
 Service Workers
 - Like a cookie that can run JS
 - No access to DOM
@@ -13,6 +18,7 @@ Service Workers
 - Can define multiple, but only one will run per page: the one with the longest path (service worker in a folder will override root for web pages in that folder) - or can explicitly scope to folder
 - Life cycle is: Download, Install, Wait (for browser restart if other service worker already running), Activate
 - Hard refresh bypasses the service worker
+- Browser will cache service worker js file max of one day; if you have access to server, can tell it to never cache
 - Chrome Dev Tools
     - Offline - turn off network connection
     - Update on reload - instead of restart
@@ -20,8 +26,14 @@ Service Workers
     - Update - updates
     - Unregister - deletes
     - Stop - stops
+- Events
+    - Fetch - when browser requests a resource
+    - Install - when service worker is first downloaded
 - Fetch API
 - Cache API
+- Cache retained longer than HTTP cache
+- Progressive web app: https, offline service worker, manifest file
+    - "Install" on home page
 
 ## Presentation
 - Introduction
@@ -30,15 +42,22 @@ Service Workers
     - python -m http.server 8000
     - Chrome Dev Tools
     - Life cycle loggers
+- Full example
+- Real-world use
+    - PWAs
 
-## Puns
-Cache as cache can
-Cache me ouside how bou dat
-Cache me if you can
-Cache money
-Cache or check
-Cache reward
-Cache a falling star and put it in your pocket
-Cache fire
+## Albums
 Johnny Cache
-Cache cow
+Johnny Cache 2: Caching Fire (image: ring of fire)
+Cache Me If You Can
+Cache Me Outside How Bou Dat
+The Man in Beige
+Cache Money
+Information Superhighway Man
+Cache Reward
+I Walk the Line Mode Browser
+Cache or Check
+Cache Cow
+Cache A Falling Star And Put It In Your Pocket
+Like the HTTP 308
+
