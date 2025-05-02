@@ -1,12 +1,27 @@
 /* Styles based on https://github.com/alessandraburckhalter/90s-Website */
 
-body {
-    background-image: url(/img/brown-paper.jpg)
+@font-face {
+    font-family: 'RioGrande';
+    src: url('/fonts/RioGrande.woff2') format('woff2');
+}
 
+body {
+    background-image: url(/img/brown-paper.jpg);
+    color: white;
 }
 
 * {
     margin: 0;
+}
+
+main {
+    margin-left: 300px;
+    width: 800px;
+    font-size: 1.5em;
+}
+
+main p {
+    margin-top: 1em;
 }
 
 .wordart {
@@ -39,22 +54,6 @@ body {
       font-weight: bold;
   }
 
-.top h2 {
-    text-align: justify;
-    width: 700px;
-    margin-top: 50px;
-    margin-left: 375px;
-    color: rgb(241, 238, 46)
-}
-
-.top img {
-    position: absolute;
-    margin-left: 375px ;
-    margin-top: 30px;
-    width: 700px;
-    height: 400px;
-}
-
 nav#menu ul {
     display: flex;
     flex-direction: column;
@@ -63,7 +62,7 @@ nav#menu ul {
     text-align: center;
     top: 0px;
     bottom: 0px;
-    background-image: url(/images/western2.jpg);
+    background-image: url(/img/western2.jpg);
     border: orange 10px solid;
     width: 190px;
     padding: 20px;
@@ -75,7 +74,7 @@ nav#menu h1 {
     padding-top: 55px;
     color: lawngreen;
     z-index: 2;
-    font-family: 'Satisfy', cursive;
+    font-family: RioGrande, cursive;
 }
 
 nav#menu img {
@@ -89,7 +88,7 @@ nav#menu li {
     padding: 2px;
     margin: 5px;
     color: rgb(247, 224, 241);
-    font-family: 'Satisfy', cursive;
+    font-family: RioGrande, cursive;
     font-size: 16pt;
     text-align: center;
     border: 2px solid rgb(248, 252, 35);
@@ -100,15 +99,6 @@ nav#menu li {
 nav#menu a {
     color: rgb(243, 239, 239);
     text-decoration: underline;
-}
-
-audio#music {
-	display: block;
-	position: fixed;
-    margin-left: 70px;
-	top: 650px;
-    width: 100px;
-    
 }
 
 .side {
@@ -136,40 +126,4 @@ audio#music {
     height: 260px;
     border: orange 7px solid;
     
-}
-
-.movies {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 450px;
-}
-
-.movies h1 {
-    text-align: center;
-    color: rgb(241, 238, 46);
-}
-
-.movies p {
-    text-align: justify;
-    width: 700px;
-    font-size: 25px;
-    font-weight: bolder;
-    color: yellow;
-    
-}
-
-.movies img {
-    width: 700px;
-    height:300px;
-}
-
-.movies hr {
-    border: 0;
-    clear:both;
-    display:block;
-    width: 800px;               
-    background-color: rgb(241, 172, 80);
-    height: 6px;
 }

@@ -8,6 +8,8 @@ Offline demo for a Lunch and Learn
 - With apologies to Willie Nelson
 
 ## Going Offline by Jeremy Keith
+P.45: "You can give your cache any name you like. You could call it JohnnyCache. Please don't."
+
 Service Workers
 - Like a cookie that can run JS
 - No access to DOM
@@ -46,18 +48,18 @@ Service Workers
 - Real-world use
     - PWAs
 
-## Albums
-Johnny Cache
-Johnny Cache 2: Caching Fire (image: ring of fire)
-Cache Me If You Can
-Cache Me Outside How Bou Dat
-The Man in Beige
-Cache Money
-Information Superhighway Man
-Cache Reward
-I Walk the Line Mode Browser
-Cache or Check
-Cache Cow
-Cache A Falling Star And Put It In Your Pocket
-Like the HTTP 308
+## Strategies
 
+### HTML
+Fetch page and cache it
+If no connection, display cached page
+If not cached, display fallback page
+
+### Images
+Look for cached image
+If not cached, fetch image and cache
+If no connection, display fallback image
+
+### Other
+Look for cached file
+If not cached, fetch

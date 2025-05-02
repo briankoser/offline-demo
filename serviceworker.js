@@ -1,68 +1,211 @@
-const version = 'V0.01';
+const version = 'V0.06';
 const staticCacheName = 'JohnnyCache' + version;
+const imagesCacheName = 'ImagesCache';
+const pagesCacheName = 'PagesCache';
+const cacheList = [
+    staticCacheName,
+    imagesCacheName,
+    pagesCacheName
+];
 
-addEventListener('install', e => {
-    const request = e.request;
-    console.log('The service worker is installing');
-    console.log(request);
+async function storeFreshInCache(request, cacheName) {
+    const fetchResponse = await fetch(request);
+    const cache = await caches.open(cacheName);
+    return await cache.put(request, fetchResponse);
+}
 
-    // New service worker takes control immediately
-    skipWaiting();
-    e.waitUntil(
+// Limit the number of items in a specified cache.
+function trimCache(cacheName, maxItems) {
+    caches.open(cacheName)
+    .then( cache => {
+        cache.keys()
+        .then(keys => {
+            if (keys.length > maxItems) {
+                // Delete the oldest item in the cache
+                cache.delete(keys[0])
+                .then( () => {
+                    // Recursive call to continue trimming down to maxItems
+                    trimCache(cacheName, maxItems)
+                });
+            }
+        });
+    });
+}
+
+addEventListener('install', installEvent => {
+    const request = installEvent.request;
+
+    skipWaiting(); // Make new service worker take control immediately
+    installEvent.waitUntil(
         caches.open(staticCacheName)
             .then(staticCache => {
-                // "nice to have" cache, failure will not prevent service worker from installing
+                // "Nice to have" cache, failure will not prevent service worker from installing
                 staticCache.addAll([
-                    '/fonts/font.woff2',
-                    '/img/icon.svg'
+                    '/fonts/RioGrande.woff2',
+                    '/img/johnny-cache.jpg',
+                    '/img/tumbleweed.gif'
                 ]);
 
-                // if any urls are bad, nothing will be cached because it will return false: these are "must have"
+                // "Must have" cache; if any urls are bad, nothing will be cached because it will return false
                 return staticCache.addAll([
                     '/css/styles.css',
-                    '/js/scripts.js'
+                    '/js/scripts.js',
+                    '/offline.html',
+                    '/img/fallback.jpg'
                 ]);
             })
     );
 });
 
-addEventListener('activate', e => {
-    const request = e.request;
-    console.log('The service worker is activating');
-    console.log(request);
+addEventListener('activate', activateEvent => {
+    const request = activateEvent.request;
     
-    e.waitUntil(
+    activateEvent.waitUntil(
+        // Delete old caches
         caches.keys()
-        // delete old caches
         .then( cacheNames => {
             return Promise.all(
                 cacheNames.map( cacheName => {
-                    if (cacheName != staticCacheName) {
+                    if (!cacheList.includes(cacheName)) {
                         return caches.delete(cacheName);
                     }
                 })
             )
         })
-        // make all clients use new service worker
+        // Make all clients use new service worker
         .then( () => {
             return clients.claim();
         })
     )
 });
 
-addEventListener('fetch', e => {
-    const request = e.request;
-    console.log('The service worker is listening');
-    console.log(request);
+addEventListener('fetch', fetchEvent => {
+    const request = fetchEvent.request;
 
-    e.respondWith(
+    // When the user requests an HTML file
+    if (request.headers.get('Accept').includes('text/html')) {
+        // When the requested page is an album page
+        if (/\/albums\/.+/.test(request.url)) {
+            fetchEvent.respondWith(
+                // Check the cache
+                caches.match(request)
+                .then( cacheResponse => {
+                    if (cacheResponse) {
+                        // Retrieve from network
+                        fetchEvent.waitUntil(
+                            storeFreshInCache(request, pagesCacheName)
+                        );
+                        
+                        return cacheResponse;
+                    }
+
+                    return fetch(request)
+                    .then ( fetchResponse => {
+                        // Make a copy because fetchResponse is a stream, can only be streamed once
+                        const copy = fetchResponse.clone();
+                        fetchEvent.waitUntil(
+                            caches.open(pagesCacheName)
+                            .then( pagesCache => {
+                                return pagesCache.put(request, copy);
+                            })
+                        );
+                        return fetchResponse;
+                    })
+                    .catch( error => {
+                        console.error(error);
+                        return caches.match('/offline.html');
+                    })
+                })
+            )
+        }
+
+        fetchEvent.respondWith(
+            fetch(request)
+            .then( fetchResponse => {
+                // Cache page
+                // Make a copy because fetchResponse is a stream, can only be streamed once
+                const copy = fetchResponse.clone();
+                fetchEvent.waitUntil(
+                    caches.open(pagesCacheName)
+                    .then( pagesCache => {
+                        return pagesCache.put(request, copy);
+                    })
+                );
+                return fetchResponse;
+            })
+            // If not retrievable, display the offline page
+            .catch(error => {
+                console.error(error);
+
+                return caches.match(request)
+                .then( cacheResponse => {
+                    if (cacheResponse) {
+                        return cacheResponse;
+                    }
+
+                    return caches.match('/offline.html');
+                })
+            })
+        );
+        return;
+    }
+
+    // When the user requests an image
+    if (request.headers.get('Accept').includes('image')) {
+        fetchEvent.respondWith(
+            // Look for the image in cache
+            caches.match(request)
+            .then(cacheResponse => {
+                if (cacheResponse) {
+                    // Fetch image from network
+                    fetchEvent.waitUntil(
+                        storeFreshInCache(request, imagesCacheName)
+                    )
+
+                    return cacheResponse;
+                }
+
+                // Not cached, fetching from network
+                return fetch(request)
+                .then( fetchResponse => {
+                    // Cache the image
+                    // Make a copy because fetchResponse is a stream, can only be streamed once
+                    const copy = fetchResponse.clone();
+                    fetchEvent.waitUntil(
+                        caches.open(imagesCacheName)
+                        .then( imageCache => {
+                            return imageCache.put(request, copy);
+                        })
+                    );
+                    return fetchResponse;
+                })
+                .catch( error => {
+                    // Display fallback image
+                    console.error(error);
+                    return caches.match('/img/fallback.jpg');
+                });
+            })
+        );
+        return;
+    }
+
+    // For all other files
+    fetchEvent.respondWith(
+        // Look for the file in cache
         caches.match(request)
-        .then(response => {
-            if (response) {
-                return response;
+        .then(cacheResponse => {
+            if (cacheResponse) {
+                return cacheResponse;
             }
 
             return fetch(request);
         })
     );
+});
+
+addEventListener('message', messageEvent => {
+    if (messageEvent.data == 'clean up caches') {
+        trimCache(pagesCacheName, 15);
+        trimCache(imagesCacheName, 20);
+    }
 });
