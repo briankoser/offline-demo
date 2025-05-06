@@ -1,4 +1,4 @@
-const version = 'V0.06';
+const version = 'V0.13';
 const staticCacheName = 'JohnnyCache' + version;
 const imagesCacheName = 'ImagesCache';
 const pagesCacheName = 'PagesCache';
@@ -33,12 +33,12 @@ function trimCache(cacheName, maxItems) {
 }
 
 addEventListener('install', installEvent => {
-    const request = installEvent.request;
-
     skipWaiting(); // Make new service worker take control immediately
+
     installEvent.waitUntil(
         caches.open(staticCacheName)
             .then(staticCache => {
+                // Precache
                 // "Nice to have" cache, failure will not prevent service worker from installing
                 staticCache.addAll([
                     '/fonts/RioGrande.woff2',
@@ -58,8 +58,6 @@ addEventListener('install', installEvent => {
 });
 
 addEventListener('activate', activateEvent => {
-    const request = activateEvent.request;
-    
     activateEvent.waitUntil(
         // Delete old caches
         caches.keys()
@@ -206,6 +204,6 @@ addEventListener('fetch', fetchEvent => {
 addEventListener('message', messageEvent => {
     if (messageEvent.data == 'clean up caches') {
         trimCache(pagesCacheName, 15);
-        trimCache(imagesCacheName, 20);
+        //trimCache(imagesCacheName, 20);
     }
 });

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page ♪ Johnny Cache</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="manifest" href="manifest.json" />
 </head>
 
 <body>
@@ -39,12 +40,12 @@
     <script>
         if (navigator.serviceWorker) {
             navigator.serviceWorker.register('/serviceworker.js')
-                .then( function (registration) {
-                    console.log("Success", registration.scope);
-                })
-                .catch( function (error) {
-                    console.error("Failure", error);
-                });
+            .then( function (registration) {
+                console.log("Success", registration.scope);
+            })
+            .catch( function (error) {
+                console.error("Failure", error);
+            });
             
             if (navigator.serviceWorker.controller) {
                 window.addEventListener('load', function () {

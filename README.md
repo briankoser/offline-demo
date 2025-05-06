@@ -45,8 +45,10 @@ Service Workers
     - Chrome Dev Tools
     - Life cycle loggers
 - Full example
+- Could create button that saves for offline
 - Real-world use
     - PWAs
+    - Cache, Fetch, Notifications, Periodic Background Sync, Gyroscope
 
 ## Strategies
 

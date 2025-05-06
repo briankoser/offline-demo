@@ -62,7 +62,7 @@ nav#menu ul {
     text-align: center;
     top: 0px;
     bottom: 0px;
-    background-image: url(/img/western2.jpg);
+    background-image: url('/img/western2.jpg');
     border: orange 10px solid;
     width: 190px;
     padding: 20px;

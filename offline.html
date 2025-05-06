@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Offline ♪ Johnny Cache</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="manifest" href="manifest.json" />
 </head>
 
 <body>
@@ -14,7 +15,35 @@
     <main>
         <marquee>You are offline</marquee>
         <img src="/img/tumbleweed.gif" width="320px">
-        <p>You are offline and this page has not been cached.</p>
+        <p>You are offline and this page has not been cached.
+        <p>These are the cached pages you can access while offline:
+        <ul id="cache-list"></ul>
+        <script>
+            // Based on https://adactio.com/journal/15844
+            (async() => {
+                const browsingHistory = [];
+                const parser = new DOMParser();
+                const cache = await caches.open('PagesCache');
+                const keys = await cache.keys();
+
+                for (const request of keys) {
+                    const response = await cache.match(request);
+                    const html = await response.text();
+                    const dom = parser.parseFromString(html, 'text/html');
+                    const data = new Object;
+                    data.url = request.url;
+                    data.title = dom.querySelector('title').innerText.split('♪')[0].trim();
+                    browsingHistory.push(data);
+                }
+                if (browsingHistory.length) {
+                    const markup = browsingHistory
+                        .map( data => `<li><a href="${ data.url }">${ data.title }</a></li>`)
+                        .sort( (a, b) => a.title - b.title)
+                        .join('');
+                    document.getElementById('cache-list').innerHTML = markup;
+                }
+            })();
+        </script>
     </main>
 
     <nav id="menu">

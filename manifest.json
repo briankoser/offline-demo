@@ -1,4 +1,5 @@
 {
+  "lang": "en",
   "name": "Johnny Cache Fan Site",
   "short_name": "Cache",
   "icons": [
@@ -15,7 +16,8 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#F5F5DC",
-  "background_color": "#F5F5DC",
-  "display": "standalone"
+  "theme_color": "#f5f5dc",
+  "background_color": "#f5f5dc",
+  "display": "standalone",
+  "start_url": "/"
 }
