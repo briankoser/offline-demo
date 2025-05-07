@@ -105,7 +105,9 @@ addEventListener('fetch', fetchEvent => {
                     return cacheResponse || caches.match('/offline.html');
                 }
             }
-        )
+        );
+
+        return;
     }
 
     // When the user requests an image
