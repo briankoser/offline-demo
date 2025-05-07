@@ -102,7 +102,12 @@ addEventListener('fetch', fetchEvent => {
                     console.error(error);
 
                     const cacheResponse = await caches.match(request);
-                    return cacheResponse || caches.match('/offline.html');
+                    
+                    if (cacheResponse) {
+                        return cacheResponse;
+                    }
+
+                    return caches.match('/offline.html');
                 }
             }
         );
