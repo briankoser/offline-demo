@@ -84,34 +84,28 @@ addEventListener('fetch', fetchEvent => {
     // When the user requests an HTML file
     if (request.headers.get('Accept').includes('text/html')) {
         fetchEvent.respondWith(
-            fetch(request)
-            .then( fetchResponse => {
-                // Cache page
-                // Make a copy because fetchResponse is a stream, can only be streamed once
-                const copy = fetchResponse.clone();
-                fetchEvent.waitUntil(
-                    caches.open(pagesCacheName)
-                    .then( pagesCache => {
-                        return pagesCache.put(request, copy);
-                    })
-                );
-                return fetchResponse;
-            })
-            // If not retrievable, display the offline page
-            .catch(error => {
-                console.error(error);
+            async function() {
+                try {
+                    const fetchResponse = await fetch(request);
 
-                return caches.match(request)
-                .then( cacheResponse => {
-                    if (cacheResponse) {
-                        return cacheResponse;
-                    }
+                    // Cache page
+                    const copy = fetchResponse.clone();
+                    fetchResponse.waitUntil(
+                        async function() {
+                            const pagesCache = await caches.open(pagesCacheName);
+                            return pagesCache.put(request, copy);
+                        }
+                    );
+                    return fetchResponse;
+                }
+                catch (error) {
+                    console.error(error);
 
-                    return caches.match('/offline.html');
-                })
-            })
-        );
-        return;
+                    const cacheResponse = await caches.match(request);
+                    return cacheResponse || caches.match('/offline.html');
+                }
+            }
+        )
     }
 
     // When the user requests an image
