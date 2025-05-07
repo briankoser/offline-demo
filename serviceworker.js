@@ -43,7 +43,8 @@ addEventListener('install', installEvent => {
                 staticCache.addAll([
                     '/fonts/RioGrande.woff2',
                     '/img/johnny-cache.jpg',
-                    '/img/tumbleweed.gif'
+                    '/img/tumbleweed.gif',
+                    '/fun-facts.html'
                 ]);
 
                 // "Must have" cache; if any urls are bad, nothing will be cached because it will return false
@@ -82,41 +83,6 @@ addEventListener('fetch', fetchEvent => {
 
     // When the user requests an HTML file
     if (request.headers.get('Accept').includes('text/html')) {
-        // When the requested page is an album page
-        if (/\/albums\/.+/.test(request.url)) {
-            fetchEvent.respondWith(
-                // Check the cache
-                caches.match(request)
-                .then( cacheResponse => {
-                    if (cacheResponse) {
-                        // Retrieve from network
-                        fetchEvent.waitUntil(
-                            storeFreshInCache(request, pagesCacheName)
-                        );
-                        
-                        return cacheResponse;
-                    }
-
-                    return fetch(request)
-                    .then ( fetchResponse => {
-                        // Make a copy because fetchResponse is a stream, can only be streamed once
-                        const copy = fetchResponse.clone();
-                        fetchEvent.waitUntil(
-                            caches.open(pagesCacheName)
-                            .then( pagesCache => {
-                                return pagesCache.put(request, copy);
-                            })
-                        );
-                        return fetchResponse;
-                    })
-                    .catch( error => {
-                        console.error(error);
-                        return caches.match('/offline.html');
-                    })
-                })
-            )
-        }
-
         fetchEvent.respondWith(
             fetch(request)
             .then( fetchResponse => {
@@ -203,7 +169,7 @@ addEventListener('fetch', fetchEvent => {
 
 addEventListener('message', messageEvent => {
     if (messageEvent.data == 'clean up caches') {
-        trimCache(pagesCacheName, 15);
-        //trimCache(imagesCacheName, 20);
+        trimCache(pagesCacheName, 5);
+        trimCache(imagesCacheName, 10);
     }
 });

@@ -45,24 +45,6 @@
         <img src="/img/keith3.jpg">
         <img src="/img/keith4.jpg">
     </div>
-
-    <script>
-        if (navigator.serviceWorker) {
-            navigator.serviceWorker.register('/serviceworker.js')
-                .then( function (registration) {
-                    console.log("Success", registration.scope);
-                })
-                .catch( function (error) {
-                    console.error("Failure", error);
-                });
-            
-            if (navigator.serviceWorker.controller) {
-                window.addEventListener('load', function () {
-                    navigator.serviceWorker.controller.postMessage('clean up caches');
-                })
-            }                
-        }
-    </script>
 </body>
 
 </html>

@@ -5,7 +5,7 @@ Offline demo for a Lunch and Learn
 - Service worker based on Jeremy Keith's in Going Offline
 - HTML and CSS based on https://github.com/alessandraburckhalter/90s-Website
 - Images from Keith Coleman http://www.johnnycash1.com/index.htm
-- With apologies to Willie Nelson
+- With apologies to Willie Nelson and Kris Kristofferson
 
 ## Going Offline by Jeremy Keith
 P.45: "You can give your cache any name you like. You could call it JohnnyCache. Please don't."
@@ -28,40 +28,28 @@ Service Workers
     - Update - updates
     - Unregister - deletes
     - Stop - stops
-- Events
-    - Fetch - when browser requests a resource
-    - Install - when service worker is first downloaded
-- Fetch API
-- Cache API
-- Cache retained longer than HTTP cache
-- Progressive web app: https, offline service worker, manifest file
-    - "Install" on home page
 
 ## Presentation
 - Introduction
 - Live coding
-    - https://fakebsod.com/windows-8-and-10/, Win + Ctrl + ->
-    - python -m http.server 8000
-    - Chrome Dev Tools
-    - Life cycle loggers
 - Full example
+    - Home
+        - F12 explainer
+        - serviceworker.js
+        - Go offline
+    - Johnny
+        - See fallback page
+    - Fun Facts
+        - See fallback image
+        - Go online, see image
+    - Favorites
+        - Go offline
+        - See page without service worker
+        - Go back online
+    - Albums
+        - Go through albums to see pages, images drop out of cache
 - Could create button that saves for offline
 - Real-world use
     - PWAs
     - Cache, Fetch, Notifications, Periodic Background Sync, Gyroscope
 
-## Strategies
-
-### HTML
-Fetch page and cache it
-If no connection, display cached page
-If not cached, display fallback page
-
-### Images
-Look for cached image
-If not cached, fetch image and cache
-If no connection, display fallback image
-
-### Other
-Look for cached file
-If not cached, fetch
